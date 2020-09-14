@@ -45,3 +45,4 @@ Android Studio 4.0
 &nbsp;
 
 © 2018-2020. Developed by Bharath Vishal G (https://github.com/BharathVishal). Logo designed by somratking420(https://github.com/somratking420). Thank you. :smile:
+"# rootDroid" 

@@ -5,6 +5,7 @@ import java.io.File
 import java.io.InputStreamReader
 
 
+
 object RootUtilities {
 
     private fun isRooted(): Boolean {
@@ -44,6 +45,7 @@ object RootUtilities {
     }
 
 
+
     fun isRootAvailable(): Boolean {
         for (pathDir in System.getenv("PATH")?.split(":".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()!!) {
             if (File(pathDir, "su").exists()) {
@@ -57,6 +59,7 @@ object RootUtilities {
     fun isBusyBoxInstalled(): Boolean {
         return checkBinaryBusyBox("busybox")
     }
+
 
 
     private fun checkBinaryBusyBox(filename: String): Boolean {
@@ -83,6 +86,26 @@ object RootUtilities {
                 val output = input.readLine()
                 if (output != null && output.toLowerCase().contains("uid=0"))
                     return true
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                process?.destroy()
+            }
+        }
+        return false
+    }
+
+    fun rootVer(): Boolean {
+        if (isRootAvailable()) {
+            var process: Process? = null
+            try {
+                process = Runtime.getRuntime().exec(arrayOf("su", "-v"))
+                val input = BufferedReader(InputStreamReader(process!!.inputStream))
+                val output = input.readLine()
+                if (output != null && output.toLowerCase().contains("20.4:MAGISKSU"))
+                    return true
+                else if (output != null && output.toLowerCase().contains("SUPERSU"))
+                    return false
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
